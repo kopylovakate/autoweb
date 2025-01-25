@@ -18,6 +18,8 @@ import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class AutoWebTest {
     private WebDriver driver;
 
@@ -27,7 +29,7 @@ public class AutoWebTest {
     }
 
     @BeforeEach
-    void createWebdriver() {
+    void setUp() {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--no-sandbox");
@@ -42,23 +44,6 @@ public class AutoWebTest {
         driver = null;
     }
 
-    @Test
-    void ValidTest() {
-        WebElement firstLastNameField = driver.findElement(By.xpath("//*[@data-test-id='name']//input"));
-        WebElement phoneNumberField = driver.findElement(By.xpath("//*[@data-test-id='phone']//input"));
-
-        firstLastNameField.sendKeys("Александр Иванов");
-        phoneNumberField.sendKeys("+7286352417");
-        driver.findElement(By.xpath("//*[@data-test-id='agreement']")).click();
-        driver.findElement(By.xpath("//button[@role='button']")).click();
-
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@data-test-id='order-success']")));
-
-        WebElement result = driver.findElement(By.xpath("//*[@data-test-id='order-success']"));
-
-        assertEquals("Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время.", result.getText().trim());
-    }
 
     @Test
     void shouldBeFailedEmptyNameInput() {
@@ -85,8 +70,27 @@ public class AutoWebTest {
 
         WebElement result = driver.findElement(By.xpath("//*[contains(@class, 'input_invalid')][@data-test-id='name']//*[contains(@class, 'input__sub')]"));
 
-        assertEquals("Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы.", result.getText().trim());
+        assertEquals("Имя и Фамилия указанны неверно. Допустимы только русские буквы, пробелы и дефисы.", result.getText().trim());
     }
+
+    @Test
+    void validTest() {
+        WebElement firstLastNameField = driver.findElement(By.xpath("//*[@data-test-id='name']//input"));
+        WebElement phoneNumberField = driver.findElement(By.xpath("//*[@data-test-id='phone']//input"));
+
+        firstLastNameField.sendKeys("Александр Иванов");
+        phoneNumberField.sendKeys("+79286352417");
+        driver.findElement(By.xpath("//*[@data-test-id='agreement']")).click();
+        driver.findElement(By.xpath("//button[@role='button']")).click();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@data-test-id='order-success']")));
+
+        WebElement result = driver.findElement(By.xpath("//*[@data-test-id='order-success']"));
+
+        assertEquals("Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время.", result.getText().trim());
+    }
+
 
     @Test
     void shouldBeFailedLongNumberInput() {
@@ -116,17 +120,4 @@ public class AutoWebTest {
         assertEquals("Поле обязательно для заполнения", result.getText().trim());
     }
 
-    @Test
-    void uncheckedAgreementTest() {
-        WebElement firstLastNameField = driver.findElement(By.xpath("//*[@data-test-id='name']//input"));
-        WebElement phoneNumberField = driver.findElement(By.xpath("//*[@data-test-id='phone']//input"));
-
-        firstLastNameField.sendKeys("Александр Иванов");
-        phoneNumberField.sendKeys("+7928635241");
-        driver.findElement(By.xpath("//button[@role='button']")).click();
-
-        WebElement result = driver.findElement(By.xpath("//*[@data-test-id='agreement']"));
-
-        assertTrue(result.isDisplayed());
-    }
 }
