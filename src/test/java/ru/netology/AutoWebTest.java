@@ -18,7 +18,6 @@ import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AutoWebTest {
     private WebDriver driver;
@@ -64,13 +63,13 @@ public class AutoWebTest {
         WebElement phoneNumberField = driver.findElement(By.xpath("//*[@data-test-id='phone']//input"));
 
         firstLastNameField.sendKeys("Александр2 Иванов");
-        phoneNumberField.sendKeys("+792863524172");
+        phoneNumberField.sendKeys("+79286352417");
         driver.findElement(By.xpath("//*[@data-test-id='agreement']")).click();
         driver.findElement(By.xpath("//button[@role='button']")).click();
 
         WebElement result = driver.findElement(By.xpath("//*[contains(@class, 'input_invalid')][@data-test-id='name']//*[contains(@class, 'input__sub')]"));
 
-        assertEquals("Имя и Фамилия указанны неверно. Допустимы только русские буквы, пробелы и дефисы.", result.getText().trim());
+        assertEquals("Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы.", result.getText().trim());
     }
 
     @Test
@@ -120,4 +119,17 @@ public class AutoWebTest {
         assertEquals("Поле обязательно для заполнения", result.getText().trim());
     }
 
+    @Test
+    void agreementTest() {
+        WebElement firstLastNameField = driver.findElement(By.xpath("//*[@data-test-id='name']//input"));
+        WebElement phoneNumberField = driver.findElement(By.xpath("//*[@data-test-id='phone']//input"));
+
+        firstLastNameField.sendKeys("Александр Иванов");
+        phoneNumberField.sendKeys("+7928635241");
+        driver.findElement(By.xpath("//button[@role='button']")).click();
+
+        WebElement result = driver.findElement(By.xpath("//*[@data-test-id='agreement']"));
+
+        assertTrue(result.isDisplayed());
+    }
 }
