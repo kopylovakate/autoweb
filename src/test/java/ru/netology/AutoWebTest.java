@@ -125,7 +125,7 @@ public class AutoWebTest {
         WebElement phoneNumberField = driver.findElement(By.xpath("//*[@data-test-id='phone']//input"));
 
         firstLastNameField.sendKeys("Александр Иванов");
-        phoneNumberField.sendKeys("+7928635241");
+        phoneNumberField.sendKeys("+79286352417");
         driver.findElement(By.xpath("//button[@role='button']")).click();
 
         WebElement result = driver.findElement(By.xpath("//*[contains(@class, 'input_invalid')][@data-test-id='agreement']"));
